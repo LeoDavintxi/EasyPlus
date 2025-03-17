@@ -1,0 +1,19 @@
+# Evitar subir archivos sensibles
+application-local.properties
+.env
+
+# Directorios de compilación
+/target/
+
+# Archivos del sistema
+*.log
+*.class
+
+# Configuraciones de IDEs
+.idea/
+*.iml
+.vscode/
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
