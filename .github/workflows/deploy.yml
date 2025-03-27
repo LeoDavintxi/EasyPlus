@@ -19,10 +19,20 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       # 3️⃣ Construye y sube la imagen a Docker Hub
-      - name: Construir y subir imagen Docker
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build the JAR file
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      - name: Build and Push Docker Image
         run: |
           docker build --platform linux/arm64 -t leodavintxi/easyplusoracle:latest .
-          docker push leodavintxi/easyplusoracle:latest
 
       # 4️⃣ Conéctate por SSH a Oracle Cloud y despliega la nueva versión
       - name: Desplegar en Oracle Cloud
