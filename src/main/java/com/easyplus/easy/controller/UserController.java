@@ -60,7 +60,7 @@ public class UserController {
 	@Operation(summary = "Eliminar un usuario", description = "Elimina un usuario registrado")
 	public ResponseEntity<Object> eliminarUsuario(@PathVariable Long id) {
 		service.deleteUser(id);
-		return ResponseEntity.ok(Map.of("mensaje", "Usuario eliminado correctamente."));
+		return ResponseEntity.ok(Map.of("mensaje", "Usuario eliminado correctamente"));
 	}
 
 	@PatchMapping("/{id}")
