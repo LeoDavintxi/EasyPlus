@@ -39,9 +39,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            sudo lsof -t -i:3000 | xargs sudo kill -9 || true
             docker stop easyplus || true
-            docker rm easyplus || true
-            docker rmi leodavintxi/easyplusoracle:latest || true
+            docker rm -f easyplus || true
+            docker rmi -f leodavintxi/easyplusoracle:latest || true
             docker pull leodavintxi/easyplusoracle:latest
             docker run -d -p 3000:3000 --name easyplus \
               -e DB_URL=${{ secrets.DB_URL }} \
