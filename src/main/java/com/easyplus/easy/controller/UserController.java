@@ -64,6 +64,7 @@ public class UserController {
 	}
 
 	@PatchMapping("/{id}")
+	@Operation(summary = "Actualiza los campos de un usuario", description = "Actualiza los campos de un usuario registrado")
 	public ResponseEntity<AppUser> actualizarUsuario(@PathVariable Long id,
 			@RequestBody Map<String, Object> userActualizado) {
 		return ResponseEntity.ok(service.updateUser(id, userActualizado));
