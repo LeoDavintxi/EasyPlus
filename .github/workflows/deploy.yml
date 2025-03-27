@@ -44,6 +44,6 @@ jobs:
           script: |
             docker stop easyplus || true
             docker rm easyplus || true
-            docker rmi Tleodavintxi/easyplusoracle:latest || true
+            docker rmi leodavintxi/easyplusoracle:latest || true
             docker pull leodavintxi/easyplusoracle:latest
             docker run -d -p 3000:3000 --name easyplus -e DB_URL=jdbc:postgresql://ep-shiny-brook-a5fp7lh6-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require -e DB_USERNAME=neondb_owner -e DB_PASSWORD=npg_0feoVDxYPWK5 -e SECURITY_USER=user -e SECURITY_PASSWORD=pass -e SPRING_PROFILES_ACTIVE=prod leodavintxi/easyplusoracle:latest
