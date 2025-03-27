@@ -48,6 +48,10 @@ public class UserController {
 	}
 
 	@PostMapping()
+	@Operation(summary = "Guardar un usuario", description = "Guarda un usuario con los datos registrados")
+	@ApiResponses({ 
+		@ApiResponse(responseCode = "201", description = "Usuario creado satisfactoriamente"),
+		@ApiResponse(responseCode = "400", description = "Datos de request errados") })
 	public ResponseEntity<AppUser> crearUsuario(@Valid @RequestBody AppUser appUser) {
 		return new ResponseEntity<>(service.createUser(appUser), HttpStatus.CREATED);
 	}
