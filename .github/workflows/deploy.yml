@@ -1,0 +1,39 @@
+name: Deploy Spring Boot App
+
+on:
+  push:
+    branches:
+      - main  # Se ejecuta cuando se hace push a la rama main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Clona el repositorio
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      # 2️⃣ Inicia sesión en Docker Hub
+      - name: Login en Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # 3️⃣ Construye y sube la imagen a Docker Hub
+      - name: Construir y subir imagen Docker
+        run: |
+          docker build --platform linux/arm64 -t leodavintxi/easyplusoracle:latest .
+          docker push leodavintxi/easyplusoracle:latest
+
+      # 4️⃣ Conéctate por SSH a Oracle Cloud y despliega la nueva versión
+      - name: Desplegar en Oracle Cloud
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker stop easyplus || true
+            docker rm easyplus || true
+            docker rmi Tleodavintxi/easyplusoracle:latest || true
+            docker pull leodavintxi/easyplusoracle:latest
+            docker run -d -p 3000:3000 --name easyplus -e DB_URL=jdbc:postgresql://ep-shiny-brook-a5fp7lh6-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require -e DB_USERNAME=neondb_owner -e DB_PASSWORD=npg_0feoVDxYPWK5 -e SECURITY_USER=user -e SECURITY_PASSWORD=pass -e SPRING_PROFILES_ACTIVE=prod leodavintxi/easyplusoracle:latest
